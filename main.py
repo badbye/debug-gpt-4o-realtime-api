@@ -61,6 +61,8 @@ def parse_log_file(file_path):
         logs.append(deal_audio_log(current_response_audio, audio_counter, "delta"))
     if current_audio_transcript:
         logs.append(current_audio_transcript)
+
+    logs = sorted(logs, key=lambda x: x['timestamp'])
     return logs
 
 def deal_audio_log(log_entry, audio_counter, key="audio"):

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Visualizer</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .input-form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Log Visualizer</h1>
+    <form class="input-form" method="POST">
+        <label for="log_path">Log file path:</label>
+        <input type="text" id="log_path" name="log_path" required>
+        <button type="submit">Load Logs</button>
+    </form>
+    {% if logs %}
+    <table>
+        <tr>
+            <th>Timestamp</th>
+            <th>Type</th>
+            <th>Data</th>
+            <th>Audio</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.timestamp }}</td>
+            <td>{{ log.data.type }}</td>
+            <td>
+                {% if not log.audio_file %}
+                <pre>{{ log.data | tojson(indent=2) }}</pre>
+                {% else %}
+                <audio controls>
+                    <source src="{{ url_for('serve_audio', filename=log.audio_file) }}" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>
