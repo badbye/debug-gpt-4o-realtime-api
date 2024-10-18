@@ -1,6 +1,5 @@
 import json
 import base64
-import io
 import os
 import wave
 from flask import Flask, render_template, send_file, request
@@ -100,4 +99,6 @@ def serve_audio(filename):
     return send_file(f"static/{filename}", mimetype="audio/wav")
 
 if __name__ == '__main__':
+    if not os.exists('static'):
+        os.mkdir('static')
     app.run(debug=True)
